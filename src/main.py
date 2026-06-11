@@ -2,6 +2,9 @@ import math
 import numpy as np
 import time
 import matplotlib.pyplot as plt
+import os
+import tkinter as tk
+from tkinter import filedialog, messagebox
 from scipy.fftpack import dct, dctn
 
 def dct_1d(segnale):  
@@ -37,6 +40,119 @@ def dct_2d(matrice):
         colonna = np.squeeze(matrix_temp[:, j])
         matrix_final[:, j] = dct_1d(colonna)
     return matrix_final
+
+class CompressioneImmagini:
+
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Compressione Immagini con DCT")
+        self.root.geometry("500x350")
+        self.root.resizable(False, False)
+
+        # Variabili per memorizzare percorso immagine
+        self.image_path = tk.StringVar()
+
+        # Selezione file .bmp
+        lbl_file = tk.Label(root, text="Seleziona un'immagine BMP:", font=("Arial", 10, "bold"))
+        lbl_file.pack(pady=(20, 5))
+
+        frame_file = tk.Frame(root)
+        frame_file.pack(fill="x", padx=20)
+
+        entry_file = tk.Entry(frame_file, textvariable=self.image_path, width=45)
+        entry_file.pack(side="left", padx=(0, 5))
+
+        btn_sfoglia = tk.Button(
+            frame_file, text="Sfoglia...", command=self.seleziona_file
+        )
+        btn_sfoglia.pack(side="left")
+
+        # --- 2. INSERIMENTO PARAMETRO F ---
+        lbl_f = tk.Label(
+            root,
+            text="Inserisci ampiezza macro-cella F (intero):",
+            font=("Arial", 10),
+        )
+        lbl_f.pack(pady=(20, 5))
+
+        self.entry_f = tk.Entry(root, width=15, justify="center")
+        self.entry_f.pack()
+
+        # --- 3. INSERIMENTO PARAMETRO d ---
+        lbl_d = tk.Label(
+            root,
+            text="Inserisci soglia di taglio d (intero):\n(deve essere compreso tra 0 e 2F - 2)",
+            font=("Arial", 10),
+        )
+        lbl_d.pack(pady=(20, 5))
+
+        self.entry_d = tk.Entry(root, width=15, justify="center")
+        self.entry_d.pack()
+
+        # --- 4. BOTTONE DI CONFERMA ---
+        btn_elabora = tk.Button(
+            root,
+            text="Avvia Elaborazione",
+            font=("Arial", 11, "bold"),
+            bg="#2ecc71",
+            fg="white",
+            command=self.valida_e_invia,
+        )
+        btn_elabora.pack(pady=30)
+
+    def seleziona_file(self):
+        file_selezionato = filedialog.askopenfilename(
+            title="Seleziona un file BMP",
+            filetypes=[("Immagini BMP", "*.bmp"), ("Tutti i file", "*.*")],
+        )
+        if file_selezionato:
+            self.image_path.set(file_selezionato)
+
+    def valida_e_invia(self):
+        percorso = self.image_path.get()
+        stringa_f = self.entry_f.get()
+        stringa_d = self.entry_d.get()
+
+        # Controllo se il file esiste ed è stato selezionato
+        if not percorso or not os.path.exists(percorso):
+            messagebox.showerror(
+                "Errore", "Seleziona un file .bmp valido dal filesystem."
+            )
+            return
+
+        # Controllo se F è un intero positivo
+        try:
+            F = int(stringa_f)
+            if F <= 0:
+                raise ValueError
+        except ValueError:
+            messagebox.showerror(
+                "Errore", "Il parametro F deve essere un intero positivo."
+            )
+            return
+
+        # Controllo se d è un intero e rispetta i vincoli legati a F
+        soglia_massima = 2 * F - 2
+        try:
+            d = int(stringa_d)
+            if d < 0 or d > soglia_massima:
+                raise ValueError
+        except ValueError:
+            messagebox.showerror(
+                "Errore",
+                f"Il parametro d deve essere un intero compreso tra 0 e {soglia_massima} (dato che F={F}).",
+            )
+            return
+
+        # Se tutti i controlli passano, chiudiamo l'interfaccia e procediamo
+        messagebox.showinfo(
+            "Configurazione Corretta",
+            f"Dati validati con successo!\n\nFile: {os.path.basename(percorso)}\nF = {F}\nd = {d}",
+        )
+        self.root.destroy()
+
+        # Salviamo i dati per la parte successiva del codice
+        self.risultati = {"percorso": percorso, "F": F, "d": d}
 
 if __name__ == "__main__":
     # segnale di esempio dato dal prof
@@ -144,3 +260,15 @@ if __name__ == "__main__":
 
     # Mostra e salva il grafico
     plt.show()
+
+    finestra = tk.Tk()
+    app = CompressioneImmagini(finestra)
+    finestra.mainloop()
+
+    if hasattr(app, "risultati"):
+        dati_progetto = app.risultati        
+        print("\nDati pronti per l'elaborazione successiva:")
+        print(f"Percorso immagine: {dati_progetto['percorso']}")
+        print(f"Ampiezza cella (F): {dati_progetto['F']}")
+        print(f"Soglia taglio (d): {dati_progetto['d']}")
+
