@@ -60,14 +60,14 @@ class CompressioneImmagini:
         frame_file.pack(fill="x", padx=20)
 
         entry_file = tk.Entry(frame_file, textvariable=self.image_path, width=45)
-        entry_file.pack(side="left", padx=(0, 5))
+        entry_file.pack(side="center", padx=(0, 5))
 
         btn_sfoglia = tk.Button(
             frame_file, text="Sfoglia...", command=self.seleziona_file
         )
-        btn_sfoglia.pack(side="left")
+        btn_sfoglia.pack(side="center")
 
-        # --- 2. INSERIMENTO PARAMETRO F ---
+        # Inserimento del valore F
         lbl_f = tk.Label(
             root,
             text="Inserisci ampiezza macro-cella F (intero):",
@@ -78,7 +78,7 @@ class CompressioneImmagini:
         self.entry_f = tk.Entry(root, width=15, justify="center")
         self.entry_f.pack()
 
-        # --- 3. INSERIMENTO PARAMETRO d ---
+        # Inserimento del valore d
         lbl_d = tk.Label(
             root,
             text="Inserisci soglia di taglio d (intero):\n(deve essere compreso tra 0 e 2F - 2)",
@@ -89,7 +89,7 @@ class CompressioneImmagini:
         self.entry_d = tk.Entry(root, width=15, justify="center")
         self.entry_d.pack()
 
-        # --- 4. BOTTONE DI CONFERMA ---
+        # Bottone di conferma
         btn_elabora = tk.Button(
             root,
             text="Avvia Elaborazione",
@@ -151,7 +151,7 @@ class CompressioneImmagini:
         )
         self.root.destroy()
 
-        # Salviamo i dati per la parte successiva del codice
+        # Salviataggio dei dati
         self.risultati = {"percorso": percorso, "F": F, "d": d}
 
 if __name__ == "__main__":
