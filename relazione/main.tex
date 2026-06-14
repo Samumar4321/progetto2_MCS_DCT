@@ -1,0 +1,51 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[paper=a4paper,margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[backend=biber, style=numeric-comp, sorting=none]{biblatex}
+\usepackage{pifont}
+\usepackage{graphicx}
+\graphicspath{{immagini/}}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[italian]{babel}
+
+\usepackage{minted}
+\usepackage{xcolor}
+\setminted{
+	fontsize=\small,           % come basicstyle=\ttfamily\small
+	linenos,                   % numeri di riga a sinistra
+	numbersep=5pt,             % distanza numeri-codice
+	tabsize=2,                 % larghezza tab
+	frame=single,              % cornice
+	breaklines=true,           % a capo automatico
+	bgcolor=bggray	           % sfondo
+}
+\definecolor{bggray}{rgb}{0.97,0.97,0.97} % colore sfondo
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\usepackage{tabularx}                                       % Tabelle con auto a capo e opzioni migliorate
+\usepackage{float}
+\usepackage{array}
+\usepackage{microtype}                                      % Migliorie nella giustificazione e tipografia
+\usepackage{enumitem}   % Migliorie e opzioni per le liste
+\usepackage[hidelinks]{hyperref}                            
+\usepackage{csquotes}
+
+\title{Relazione Metodi del Calcolo Scientifico \newline Secondo Progetto}
+\author{Marelli Samuele 899768 - Fumagalli Andrea 900329}
+
+\begin{document}
+	\maketitle
+	\section{Introduzione}
+	\input{capitoli/introduzione.tex}
+	\section{Implementazione DCT2 'fatta in casa'}
+	\input{capitoli/parte1.tex}
+
+    
+	
+
+\end{document}
+
