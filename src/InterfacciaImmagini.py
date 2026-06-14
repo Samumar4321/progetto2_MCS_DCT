@@ -149,5 +149,6 @@ class InterfacciaImmagini:
             return
         comprimitore = ComprimiImmagine(img_original, f, d)
         img_reconstructed = comprimitore.compress_matrix()
-        self.show_image_comparison(img_original, img_reconstructed, f)    
+        # Esegui la visualizzazione nel thread principale di Tkinter
+        self.root.after(0, lambda: self.show_image_comparison(img_original, img_reconstructed, f))    
        
