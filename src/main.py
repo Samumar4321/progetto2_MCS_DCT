@@ -4,11 +4,30 @@ import matplotlib.pyplot as plt
 import tkinter as tk 
 from compressioneImmagine import ComprimiImmagine
 from InterfacciaImmagini import InterfacciaImmagini
-from scipy.fftpack import dctn
+from scipy.fft import dct, dctn
 from homemade_dct import dct_2d
 from PIL import Image
 
 def part1():
+    # # Verifica che scipy faccia l'8x8
+    # matrix_verifica = np.array([
+    #     [231, 32, 233, 161, 24, 71, 140, 245],
+    #     [247, 40, 248, 245, 124, 204, 36, 107],
+    #     [234, 202, 245, 167, 9, 217, 239, 173],
+    #     [193, 190, 100, 167, 43, 180, 8, 70],
+    #     [11, 24, 210, 177, 81, 243, 8, 112],
+    #     [97, 195, 203, 47, 125, 114, 165, 181],
+    #     [193, 70, 174, 167, 41, 30, 127, 245],
+    #     [87, 149, 57, 192, 65, 129, 178, 228]
+    # ])
+    # dct1_scipy = dct(matrix_verifica[0 , :], type=2, norm='ortho')
+    # print("DCT 1D con SciPy (riga 1):")
+    # print(dct1_scipy)
+    
+    # dct_scipy = dctn(matrix_verifica, type=2, norm='ortho')
+    # print("DCT 2D con SciPy:")
+    # print(dct_scipy)
+    
     #Definizione dei valori di N
     valori_N = [4, 8, 16, 32, 64, 128, 256]
     tempi_custom = []

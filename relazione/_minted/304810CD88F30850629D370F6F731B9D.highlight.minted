@@ -1,0 +1,15 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{dct\PYGZus{}2d}\PYG{p}{(}\PYG{n}{matrice}\PYG{p}{):}
+    \PYG{n}{num\PYGZus{}righe} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{(}\PYG{n}{matrice}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{]}
+	\PYG{n}{num\PYGZus{}colonne} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{(}\PYG{n}{matrice}\PYG{p}{)[}\PYG{l+m+mi}{1}\PYG{p}{]}
+	\PYG{n}{matrix\PYGZus{}temp} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{num\PYGZus{}righe}\PYG{p}{,} \PYG{n}{num\PYGZus{}colonne}\PYG{p}{))}
+	\PYG{c+c1}{\PYGZsh{} Applica dct1 su ogni riga}
+	\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{num\PYGZus{}righe}\PYG{p}{):}
+		\PYG{n}{matrix\PYGZus{}temp}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{dct\PYGZus{}1d}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{squeeze}\PYG{p}{(}\PYG{n}{matrice}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,} \PYG{p}{:]))}
+	\PYG{n}{matrix\PYGZus{}final} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{num\PYGZus{}righe}\PYG{p}{,} \PYG{n}{num\PYGZus{}colonne}\PYG{p}{))}
+	\PYG{c+c1}{\PYGZsh{} Applica dct1 su ogni colonna}
+	\PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{num\PYGZus{}colonne}\PYG{p}{):}
+		\PYG{n}{colonna} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{squeeze}\PYG{p}{(}\PYG{n}{matrix\PYGZus{}temp}\PYG{p}{[:,} \PYG{n}{j}\PYG{p}{])}
+		\PYG{n}{matrix\PYGZus{}final}\PYG{p}{[:,} \PYG{n}{j}\PYG{p}{]} \PYG{o}{=} \PYG{n}{dct\PYGZus{}1d}\PYG{p}{(}\PYG{n}{colonna}\PYG{p}{)}
+	\PYG{k}{return} \PYG{n}{matrix\PYGZus{}final}
+\end{MintedVerbatim}

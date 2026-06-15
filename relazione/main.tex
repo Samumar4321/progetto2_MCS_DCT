@@ -11,17 +11,7 @@
 
 \usepackage{minted}
 \usepackage{xcolor}
-\setminted{
-	fontsize=\small,           % come basicstyle=\ttfamily\small
-	linenos,                   % numeri di riga a sinistra
-	numbersep=5pt,             % distanza numeri-codice
-	tabsize=2,                 % larghezza tab
-	frame=single,              % cornice
-	breaklines=true,           % a capo automatico
-	bgcolor=bggray	           % sfondo
-}
-\definecolor{bggray}{rgb}{0.97,0.97,0.97} % colore sfondo
-
+\usepackage{amsmath}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -32,7 +22,7 @@
 \usepackage{microtype}                                      % Migliorie nella giustificazione e tipografia
 \usepackage{enumitem}   % Migliorie e opzioni per le liste
 \usepackage[hidelinks]{hyperref}                            
-\usepackage{csquotes}
+
 
 \title{Relazione Metodi del Calcolo Scientifico \newline Secondo Progetto}
 \author{Marelli Samuele 899768 - Fumagalli Andrea 900329}
@@ -43,9 +33,5 @@
 	\input{capitoli/introduzione.tex}
 	\section{Implementazione DCT2 'fatta in casa'}
 	\input{capitoli/parte1.tex}
-
-    
-	
-
 \end{document}
 

@@ -1,1 +1,160 @@
-L'implementazione della DCT2 fatta in casa si è basata sull'applicazione della DCT1 (anche questa implementata da noi) prima alle righe e successivamente alle colonne di matrici quadrate NxN con N sempre crescente.
+
+\subsection{Libreria di supporto utilizzate}
+Per la realizzazione della DCT1 e DCT2 non sono state usate librerie per il calcolo delle trasformate di Fourier; sono però state sfruttate alcune funzionalità legate al calcolo matematico e, in particolare, alla gestione degli array grazie rispettivamente alle librerie \textbf{Math} e \textbf{NumPy}.
+Di seguito riportiamo la configurazione di queste:
+\begin{listing}[ht]
+\begin{minted}[linenos, frame=lines]{python}
+import math
+import numpy as np
+\end{minted}
+\end{listing}
+
+\subsection{Codice DCT1}
+Per l'implementazione della Trasformata Discreta del Coseno (DCT) per matrici quadrate (in 2d) abbiamo deciso iniziare scrivendo l'algoritmo per calcolare la Trasformata per un singolo vettore monodimensionale (1d), successivamente applicheremo questa funzione alle righe e alle colonne della matrice, come mostrato a lezione.
+Il codice per la DCT1 è il seguente:
+\begin{listing}[ht]
+\begin{minted}[linenos, frame=lines]{python}
+def dct_1d(segnale):
+	N = np.shape(segnale)[0]
+	# Vettore per memorizzare i coefficienti DCT
+	coeff = np.array([0.0] * N)
+	# Ciclo per le frequenze
+	for k in range(N):
+		somma = 0.0
+		# Ciclo dei singoli campioni del segnale
+		for j in range(N):
+			angolo = k * math.pi * (2 * j + 1) / (2 * N)
+			somma += segnale[j] * math.cos(angolo)
+		# Normalizzazione del coefficiente
+		if k == 0:
+			alpha = math.sqrt(1.0 / N)
+		else:
+			alpha = math.sqrt(2.0 / N)		
+		coeff[k] = alpha * somma
+	return coeff
+\end{minted}
+\end{listing}
+
+La funzione utilizza un doppio ciclo for, il primo serve per selezionare la singola frequenza k su cui operare in quella iterazione, il secondo ciclo for invece calcola il coefficiente della frequenza in analisi.
+Prima di calcolare il coefficiente si stabiolisce il fattore di normalizzazione da utilizzare per quella iterazione.
+Una volta calcolati i coefficienti vengono ritornati sotto forma vettoriale.
+\subsection{Codice DCT2}
+Come anticipato, il calcolo della DCT2 fatta in casa si basa sull'applicazione della DCT1 prima alle righe della matrice originale, e successivamente alle colonne della matrice risultante.
+\begin{listing}[ht]
+\begin{minted}[linenos, frame=lines]{python}
+def dct_2d(matrice):
+    num_righe = np.shape(matrice)[0]
+	num_colonne = np.shape(matrice)[1]
+	matrix_temp = np.zeros((num_righe, num_colonne))
+	# Applica dct1 su ogni riga
+	for i in range(num_righe):
+		matrix_temp[i, :] = dct_1d(np.squeeze(matrice[i, :]))
+	matrix_final = np.zeros((num_righe, num_colonne))
+	# Applica dct1 su ogni colonna
+	for j in range(num_colonne):
+		colonna = np.squeeze(matrix_temp[:, j])
+		matrix_final[:, j] = dct_1d(colonna)
+	return matrix_final
+\end{minted}
+\end{listing}
+
+Otteniamo il numero di righe e colonne della matrice originale, creiamo una nuova matrice intermedia, inizializzata a zeri, basata sulla dimensione di quella originale all'interno della quale verranno immagazzinati i coefficienti della DCT1 applicata sulle righe.
+Calcoliamo questi coefficienti applicando la DCT1 sulle righe; definiamo la matrice finale, che conterrà i coefficienti corretti, inizializzandola con zeri.
+La matrice finale sarà riempita con i coefficienti calcolati applicando la DCT1 alle righe della matrice intermedia calcolata al passo precedente.
+Infine ritorniamo la matrice finale dei coefficienti.
+
+\subsection{Validazione algoritmo}
+Per assicurarci che il calcolo risulti corretto abbiamo confrontato i coefficienti calcolati da entrambe le DCT: sia quella \textit{homemade} che quelle implementate nelle librerie; mettendoli a paragone con quelli calcolati su una matrice nota.
+Per la correttezza dei coefficienti dell'algoritmo DCT1, utilizziamo il vettore:
+\begin{center}
+	$
+	\begin{bmatrix}
+		231 & 32 & 233 & 161 & 24 & 71 & 140 & 245
+	\end{bmatrix}
+	$
+\end{center}
+
+I coefficienti dati dall'applicazione della DCT1 a questo vettore devo essere:
+\begin{center}
+	$
+	\begin{bmatrix}
+		4.01e+02 & 6.60e+00 & 1.09e+02 & -1.12e+02 & 6.54e+01 & 1.21e+02 & 1.16e+02 & 2.88e+01
+	\end{bmatrix}
+	$
+\end{center}
+
+Eseguendo gli algoritmi notiamo che:
+\begin{itemize}
+	\item la DCT1 homemade ritorna i corretti coefficienti grazie all'impostazione di normalizzazione.
+	\item la libreria invece necessita della specifica \texttt{norm $=$ 'ortho'}, per comunicare alla funzione di non utilizzare la normalizzazione di default (backward), ma applicare quella ortonormale.
+\end{itemize}
+
+Per la correttezza della DCT2 invece, utilizziamo la matrice:
+\begin{center}		
+	$
+	\begin{bmatrix}
+		231 & 32 & 233 & 161 & 24 & 71 & 140 & 245 \\
+		247 & 40 & 248 & 245 & 124 & 204 & 36 & 107 \\
+		234 & 202 & 245 & 167 & 9 & 217 & 239 & 173 \\
+		193 & 190 & 100 & 167 & 43 & 180 & 8 & 70 \\
+		11 & 24  & 210  & 177 & 81 & 243 & 8 & 112 \\
+		97 & 195 & 203 & 47 & 125 & 114 & 165 & 181 \\
+		193 & 70 & 174 & 167 & 41 & 30 & 127 & 245 \\
+		87 & 149 & 57 & 192 & 65 & 129 & 178 & 228 \\
+	\end{bmatrix}
+	$
+\end{center}
+
+Questa deve ritornare i coeficienti:
+\begin{center}
+	{\small
+	\hspace*{-1.5cm}
+		$
+		\begin{bmatrix}
+			1.11e+03 & 4.40e+01 & 7.59e+01 & -1.38e+02 & 3.50e+00 & 1.22e+02 & 1.95e+02 & -1.01e+02 \\
+			7.71e+01 & 1.14e+02 & -2.18e+01 & 4.13e+01 & 8.77e+00 & 9.90e+01 & 1.38e+02 & 1.09e+01 \\
+			4.48e+01 & -6.27e+01 & 1.11e+02 & -7.63e+01 & 1.24e+02 & 9.55e+01 & -3.98e+01 & 5.85e+01 \\
+			-6.99e+01 & -4.02e+01 & -2.34e+01 & -7.67e+01 & 2.66e+01 & -3.68e+01 & 6.61e+01 & 1.25e+02 \\
+			-1.09e+02 & -4.33e+01 & -5.55e+01 & 8.17e+00 & 3.02e+01 & -2.86e+01 & 2.44e+00 & -9.41e+01 \\
+			-5.38e+00 & 5.66e+01 & 1.73e+02 & -3.54e+01 & 3.23e+01 & 3.34e+01 & -5.81e+01 & 1.90e+01 \\ 
+			7.88e+01 & -6.45e+01 & 1.18e+02 & -1.50e+01 & -1.37e+02 & -3.06e+01 & -1.05e+02 & 3.98e+01 \\
+			1.97e+01 & -7.81e+01 & 9.72e-01 & -7.23e+01 & -2.15e+01 & 8.13e+01 & 6.37e+01 & 5.90e+00 \\
+		\end{bmatrix}
+		$
+	}
+\end{center}
+
+Analogamente al caso precedente, la DCT1 homemade ritorna i coefficienti corretti per costruzione, mentre quella derivata dalla libreria necessita del parametro \texttt{norm $=$ 'ortho'} nella chiamata di funzione.
+
+\subsection{Confronto tempi di esecuzione}
+Come passaggio finale, abbiamo confrontato i tempi di esecuzione della nostra implementazione con la versione \textit{Fast} della libreria \textbf{SciPy}.
+Per valutare le tempistiche abbiamo generato matrici quadrate di dimensione $N \times N$ con $N$ crescente, eseguendo entrambi gli algoritmi e misurando il tempo impiegato per calcolare le trasformate.
+Di seguito riportiamo una tabella con i vari tempi di esecuzione per i diversi valori di $N$:
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\textwidth}{| >{\centering\arraybackslash}X | >{\centering\arraybackslash}X | >{\centering\arraybackslash}X |}
+		\hline
+		\textbf{Dimensione} & \textbf{DCT2 Homemade} & \textbf{DCT2 SciPy} \\ 		
+		\hline
+		$N = 4$ & $0.000113$ s & $0.000036$ s \\
+		$N = 8$ & $0.000448$ s & $0.000030$ s \\
+		$N = 16$ & $0.003077$ s & $0.000035$ s \\
+		$N = 32$ & $0.019871$ s & $0.000070$ s \\
+		$N = 64$ & $0.140704$ s & $0.000093$ s \\
+		$N = 128$ & $1.199802$ s & $0.000170$ s \\
+		$N = 256$ & $10.125923$ s & $0.000477$ s \\
+		\hline	\end{tabularx}
+\end{table}      
+
+Per visualizzare meglio l'andamento asintotico abbiamo inserito i dati su un grafico a scala semilogaritmica sulle ordinate.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{confrontoDCT.png}
+	\caption{Confronto tempi di esecuzione al variare di N}
+\end{figure}
+
+Come mostrato dall'andamento del grafico, i tempi riflettono la complessità teorica.
+La nostra implementazione della DCT2 possiede una crescita cubica, il tempo è quindi proporzionale a $N^3$;
+l'algoritmo di SciPy invece sfrutta l'ottimizzazione fft (Fast Fourier Transform) con tempi di esecuzione proporzionali a $N^2 \log(N)$, risultando quindi ordini di grandezza più efficiente al crescere di $N$.
+Una anomalia segnalata è la discrepanza con valori di $N$ molto piccoli, infatti quando le matrici (e quindi le operazioni) risultano di scarsa dimensione, l'implementazione di \textbf{SciPy} tende ad essere irregolare, atteggiamendo dovuto all'overhead aggiunto dalla chiamata alla libreria (trascurabile sulle grandi dimensioni).
+

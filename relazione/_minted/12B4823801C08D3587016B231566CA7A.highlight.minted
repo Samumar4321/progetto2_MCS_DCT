@@ -1,0 +1,20 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{dct\PYGZus{}1d}\PYG{p}{(}\PYG{n}{segnale}\PYG{p}{):}
+	\PYG{n}{N} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{(}\PYG{n}{segnale}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{]}
+	\PYG{c+c1}{\PYGZsh{} Vettore per memorizzare i coefficienti DCT}
+	\PYG{n}{coeff} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{l+m+mf}{0.0}\PYG{p}{]} \PYG{o}{*} \PYG{n}{N}\PYG{p}{)}
+	\PYG{c+c1}{\PYGZsh{} Ciclo per le frequenze}
+	\PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{N}\PYG{p}{):}
+		\PYG{n}{somma} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+		\PYG{c+c1}{\PYGZsh{} Ciclo dei singoli campioni del segnale}
+		\PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{N}\PYG{p}{):}
+			\PYG{n}{angolo} \PYG{o}{=} \PYG{n}{k} \PYG{o}{*} \PYG{n}{math}\PYG{o}{.}\PYG{n}{pi} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{j} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{N}\PYG{p}{)}
+			\PYG{n}{somma} \PYG{o}{+=} \PYG{n}{segnale}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{*} \PYG{n}{math}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{angolo}\PYG{p}{)}
+		\PYG{c+c1}{\PYGZsh{} Normalizzazione del coefficiente}
+		\PYG{k}{if} \PYG{n}{k} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+			\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{math}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{l+m+mf}{1.0} \PYG{o}{/} \PYG{n}{N}\PYG{p}{)}
+		\PYG{k}{else}\PYG{p}{:}
+			\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{math}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{l+m+mf}{2.0} \PYG{o}{/} \PYG{n}{N}\PYG{p}{)}		
+		\PYG{n}{coeff}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{n}{alpha} \PYG{o}{*} \PYG{n}{somma}
+	\PYG{k}{return} \PYG{n}{coeff}
+\end{MintedVerbatim}

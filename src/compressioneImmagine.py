@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.fftpack import dctn, idctn
+from scipy.fft import dctn, idctn
 
 class ComprimiImmagine:
     
