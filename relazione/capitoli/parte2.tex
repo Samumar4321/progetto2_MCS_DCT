@@ -1,0 +1,19 @@
+\subsection{Struttura del codice}
+Il secondo obbiettivo del progetto è applicare la DCT2 con lo scopo di comprimere immagini in scale di grigi, ricostruendo successivamente quest'ultima notando la perdita di informazioni.
+Per motivi di efficienza e velocità la compressione usando DCT2 non avviene con il metodo \textit{homemade} precedentemente sviluppato, ma si utilizza la versione \textit{Fast} presente nella libreria \textbf{SciPy}.
+Il codice deve permettere un comportamente simile all'algoritmo di comopressione JPEG; il progetto è così strutturato:
+\begin{itemize}
+	\item \textbf{interfacciaImmagini.py}: si tratta della classe che gestisce l'interfaccia utente, ha il compito di interagire con quest'ultimo e mostrare i risultati dell'algoritmo applicato all'immagine scelta.
+	\item \textbf{compressioneImmagini.py}: è la classe che si occupa di eseguire l'effettiva compressione di una matrice (immagine in scala di grigi convertita); la classe accetta parametri quali ampiezza (\texttt(f)) e soglia di taglio (\texttt{d}). Permette anche di ottenere la matrice ricostruita ottenuta dalla divisione, compressione e filtraggio della matrice originale.
+	\item \textbf{main.py}: si tratta del file principale, da quì viene eseguito il codice per la comparazione tra \textit{DCT homemade} sviluppata da noi e \textit{DCT Fast} della libreria. Successivamente a questa comparazione viene inizializzata l'interfaccia che si occuperà di gestire la sezione di compressione immagini in stile jpeg.
+\end{itemize} 
+\subsection{Interfaccia grafica Tkinter}
+
+\subsection{Compressione}
+	\subsubsection{Suddivisione in blocchi e compressione}
+	
+	\subsubsection{Filtraggio Frequenze}
+	
+	\subsubsection{Ricostruzione}
+
+\subsection{Analisi risultati}

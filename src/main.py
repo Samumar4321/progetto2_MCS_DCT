@@ -2,11 +2,9 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 import tkinter as tk 
-from compressioneImmagine import ComprimiImmagine
 from InterfacciaImmagini import InterfacciaImmagini
-from scipy.fft import dct, dctn
+from scipy.fft import dctn
 from homemade_dct import dct_2d
-from PIL import Image
 
 def part1():
     # # Verifica che scipy faccia l'8x8
@@ -85,14 +83,6 @@ def part1():
 
     # Mostra e salva il grafico
     plt.show()
-
-def load_img(path):
-    try:
-        img = Image.open(path).convert('L')
-        return np.array(img)
-    except Exception as e:
-        print(f"Errore nel caricamento dell'immagine: {e}")
-        return None
 
 if __name__ == "__main__":
     part1()

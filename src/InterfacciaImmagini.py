@@ -110,7 +110,7 @@ class InterfacciaImmagini:
             )
             return
 
-        # Se tutti i controlli passano, chiudiamo l'interfaccia e procediamo
+        # Se tutti i controlli passano, procediamo
         messagebox.showinfo(
             "Configurazione Corretta",
             f"Dati validati con successo!\n\nFile: {os.path.basename(percorso)}\nF = {f}\nd = {d}",
@@ -150,5 +150,4 @@ class InterfacciaImmagini:
         comprimitore = ComprimiImmagine(img_original, f, d)
         img_reconstructed = comprimitore.compress_matrix()
         # Esegui la visualizzazione nel thread principale di Tkinter
-        self.root.after(0, lambda: self.show_image_comparison(img_original, img_reconstructed, f))    
-       
+        self.root.after(0, lambda: self.show_image_comparison(img_original, img_reconstructed, f))
