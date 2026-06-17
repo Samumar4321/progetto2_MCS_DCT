@@ -7,13 +7,114 @@ Il codice deve permettere un comportamente simile all'algoritmo di comopressione
 	\item \textbf{compressioneImmagini.py}: è la classe che si occupa di eseguire l'effettiva compressione di una matrice (immagine in scala di grigi convertita); la classe accetta parametri quali ampiezza (\texttt(f)) e soglia di taglio (\texttt{d}). Permette anche di ottenere la matrice ricostruita ottenuta dalla divisione, compressione e filtraggio della matrice originale.
 	\item \textbf{main.py}: si tratta del file principale, da quì viene eseguito il codice per la comparazione tra \textit{DCT homemade} sviluppata da noi e \textit{DCT Fast} della libreria. Successivamente a questa comparazione viene inizializzata l'interfaccia che si occuperà di gestire la sezione di compressione immagini in stile jpeg.
 \end{itemize} 
+
 \subsection{Interfaccia grafica Tkinter}
+Per gestire l'interfaccia utente abbiamo usufruito di una famosa libreria standard di Python: \textbf{Tkinter}.
+Questa ci ha permesso di creare una semplice finestra che permettesse all'utente di inserire i valori di ampiezza e soglia di taglio e l'immagine da comprimere.
+Nell'interfaccia è presente un pulsante che avvia la verifica dei valori inseriti: se l'immagine risulta idonea e se ampiezza e taglio rispettano le regole imposte; se le variabili risultano corrette il programma procede alla compressione dell'immagine.
+La compressione avviene asincronamente grazie alla creazione di un nuovo Thread che si occuperà di chiamare la classe \texttt{compressioneImmagini}.
+Abbiamo ritenuto utile impostare l'esecuzione in questa maniera per poter osservare il risultato finale su diversi esempi contemporaneamente, beneficio aggiunto deriva dal poter interagire con l'interfaccia una volta avviata la compressione.
 
+	\subsubsection{Caricamento immagine}
+	La funzione \texttt{load\_img} si occupa di caricare l'immagine fornita come percorso assoluto dalla GUI; analizzando il codice:
+	\begin{listing}[ht]
+		\begin{minted}[linenos, frame=lines]{python}
+def load_img(self, path):
+try:
+img = Image.open(path).convert('L')
+return np.array(img)
+except Exception as e:
+print(f"Errore nel caricamento dell'immagine: {e}")
+return None
+		\end{minted}
+	\end{listing}
+	Notiamo che forziamo l'immagine ad assumere una scala di grigi con il comando \texttt{Image.open().convert('L')}, vitale siccome ci occupiamo unicamente di matrici a due dimensioni, dunque non colorate.
+	Per convertire l'immagine in una matrice sfruttiamo un combinazione di \textbf{Pillow} per caricarla e forzarla in scala di grigi, e \textbf{NumPy} per creare un oggetto array facilmente accessibile.
+	
 \subsection{Compressione}
-	\subsubsection{Suddivisione in blocchi e compressione}
+	\subsubsection{Taglio matrice}
+	La funzione \texttt{matrix\_cut()} permette di tagliare la matrice originale in modo che la risultante sia un multiplo di $f$ per le dimensioni di riga e colonna originali, tutti i dati che risultano oltre andranno scartati.
+	Questo velocizza la successiva fase di divisione in blocchi di dimensione \textit{$f \times f$}, in quanto le dimensioni della matrice saranno multipli di $f$ stesso.
+	\begin{listing}[ht]
+		\begin{minted}[linenos, frame=lines]{python}
+def matrix_cut(self, matrix):
+	H, W = matrix.shape
+	cut_H = (H // self.f) * self.f
+	cut_W = (W // self.f) * self.f
+	cropped_matrix = matrix[:cut_H, :cut_W]        
+	print(f"Dimensioni originali: {H}x{W}")
+	print(f"Dimensioni ritagliate: {cut_H}x{cut_W}")
+	return cropped_matrix
+		\end{minted}
+	\end{listing}
 	
-	\subsubsection{Filtraggio Frequenze}
+	\subsubsection{Suddivisione in blocchi, DCT e filtraggio frequenze}
+	La divisione in blocchi è effettuata dalla funzione \texttt{split\_in\_blocks()} che divide una matrice passata come parametro in blocchi di dimensione \textit{$f \times f$}, assumendo che la matrice abbia numero di colonne e righe multipli di $f$ stesso.
+	Ritorna un array di \textbf{NumPy} che contiene i vari blocchi, si tratta di un array tridimensionale, in quanto ogni elemento dell'array è in sè una matrice a due dimensioni (il singolo blocco).
+	\begin{listing}[ht]
+		\begin{minted}[linenos, frame=lines]{python}
+def split_in_blocks(self, matrix):
+	H, W = matrix.shape
+	blocks = []
+	for i in range(0, H, self.f):
+		for j in range(0, W, self.f):
+			block = matrix[i:i+self.f, j:j+self.f]
+			blocks.append(block)
+	return np.array(blocks)
+		\end{minted}
+	\end{listing}
 	
-	\subsubsection{Ricostruzione}
+	Il lavoro di compressione è delegato alle due funzioni \texttt{process\_block()} e \texttt{process\_blocks()}, la prima si occupa di processare il singolo blocco, la seconda chiamerà la prima funzione su ogni blocco e accumulerà i risultati.
+	\texttt{process\_block()} applica inizialmente la DCT2 a tutto il blocco, ottenuti i coefficienti li analizza scartando tutti quelli in cui è vero $c_lk \geq d$ ed impostando il loro valore a 0.
+	Una volta rimossi i coefficienti applica la IDCT2 alla matrice risultante; infine arrotonda ogni coefficiente all'intero più vicino, impostando quelli negativi $= 0$ e quelli $> 255$ a $255$.
+	Ritorna il vettore calcolato.
+	\texttt{process\_blocks()} applica la funzione precedente ad ogni blocco, accumulando in una matrice tridimensionale i risultati; ritorna questa matrice una volta elaborati tutti i blocchi.
+	\begin{listing}[ht]
+		\begin{minted}[linenos, frame=lines]{python}
+ def process_block(self, block):
+	c = dctn(block, type=2, norm='ortho')
+	for row in range(self.f):
+		for col in range(self.f):
+			if (row + col) >= self.d:
+			c[row, col] = 0
+	ff = idctn(c, type=2, norm='ortho')
+	ff_int = np.clip(np.round(ff).astype(int), 0, 255)
+	return ff_int
 
+def process_blocks(self, blocks):
+	processed_blocks = []
+	for block in blocks:
+		processed_block = self.process_block(block)
+		processed_blocks.append(processed_block)
+	return np.array(processed_blocks)
+		\end{minted}
+	\end{listing}
+		
+	\subsubsection{Ricostruzione}
+	La ricostruzione avviene inserendo in posizione corretta i valori presenti in ogni blocco processato; i blocchi vengono posizionati in modo da ricostruire una riga alla volta.
+	\begin{listing}[ht]
+		\begin{minted}[linenos, frame=lines]{python}
+def reconstruct_matrix(self, blocks, original_shape):
+	H, W = original_shape
+	res = np.zeros((H, W), dtype=int)
+	i = 0
+	for row in range(0, H, self.f):
+		for col in range(0, W, self.f):
+			res[row:row+self.f, col:col+self.f] = blocks[i]
+			i += 1
+	return res			
+		\end{minted}
+	\end{listing}
+	
+	\subsubsection{Compressione}
+	\begin{listing}[ht]
+		\begin{minted}[linenos, frame=lines]{python}
+def compress_matrix(self, matrix): 
+	cropped_matrix = self.matrix_cut(matrix)
+	blocks = self.split_in_blocks(cropped_matrix)     
+	processed_blocks = self.process_blocks(blocks)
+	reconstructed_matrix = self.reconstruct_matrix(processed_blocks, cropped_matrix.shape)
+	return reconstructed_matrix		
+		\end{minted}
+	\end{listing}
 \subsection{Analisi risultati}

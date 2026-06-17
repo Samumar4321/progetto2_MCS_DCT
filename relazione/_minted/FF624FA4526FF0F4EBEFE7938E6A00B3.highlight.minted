@@ -1,0 +1,10 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{matrix\PYGZus{}cut}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{matrix}\PYG{p}{):}
+	\PYG{n}{H}\PYG{p}{,} \PYG{n}{W} \PYG{o}{=} \PYG{n}{matrix}\PYG{o}{.}\PYG{n}{shape}
+	\PYG{n}{cut\PYGZus{}H} \PYG{o}{=} \PYG{p}{(}\PYG{n}{H} \PYG{o}{//} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{f}\PYG{p}{)} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{f}
+	\PYG{n}{cut\PYGZus{}W} \PYG{o}{=} \PYG{p}{(}\PYG{n}{W} \PYG{o}{//} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{f}\PYG{p}{)} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{f}
+	\PYG{n}{cropped\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{matrix}\PYG{p}{[:}\PYG{n}{cut\PYGZus{}H}\PYG{p}{,} \PYG{p}{:}\PYG{n}{cut\PYGZus{}W}\PYG{p}{]}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Dimensioni originali: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{H}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{x}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{W}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Dimensioni ritagliate: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{cut\PYGZus{}H}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{x}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{cut\PYGZus{}W}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+	\PYG{k}{return} \PYG{n}{cropped\PYGZus{}matrix}
+\end{MintedVerbatim}

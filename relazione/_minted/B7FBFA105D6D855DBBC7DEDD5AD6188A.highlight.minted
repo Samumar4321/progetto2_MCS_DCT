@@ -1,0 +1,8 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{compress\PYGZus{}matrix}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{matrix}\PYG{p}{):}
+	\PYG{n}{cropped\PYGZus{}matrix} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{matrix\PYGZus{}cut}\PYG{p}{(}\PYG{n}{matrix}\PYG{p}{)}
+	\PYG{n}{blocks} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{split\PYGZus{}in\PYGZus{}blocks}\PYG{p}{(}\PYG{n}{cropped\PYGZus{}matrix}\PYG{p}{)}
+	\PYG{n}{processed\PYGZus{}blocks} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{process\PYGZus{}blocks}\PYG{p}{(}\PYG{n}{blocks}\PYG{p}{)}
+	\PYG{n}{reconstructed\PYGZus{}matrix} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{reconstruct\PYGZus{}matrix}\PYG{p}{(}\PYG{n}{processed\PYGZus{}blocks}\PYG{p}{,} \PYG{n}{cropped\PYGZus{}matrix}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{)}
+	\PYG{k}{return} \PYG{n}{reconstructed\PYGZus{}matrix}		
+\end{MintedVerbatim}
