@@ -3,16 +3,15 @@ from scipy.fft import dctn, idctn
 
 class ComprimiImmagine:
     
-    def __init__(self, matrix, f, d):        
-        self.matrix = matrix
+    def __init__(self, f, d):        
         self.f = f
         self.d = d        
     
-    def matrix_cut(self):
-        H, W = self.matrix.shape
+    def matrix_cut(self, matrix):
+        H, W = matrix.shape
         cut_H = (H // self.f) * self.f
         cut_W = (W // self.f) * self.f
-        cropped_matrix = self.matrix[:cut_H, :cut_W]        
+        cropped_matrix = matrix[:cut_H, :cut_W]        
         print(f"Dimensioni originali: {H}x{W}")
         print(f"Dimensioni ritagliate: {cut_H}x{cut_W}")
         return cropped_matrix
@@ -43,17 +42,21 @@ class ComprimiImmagine:
             processed_blocks.append(processed_block)
         return np.array(processed_blocks)
     
-    def compress_matrix(self):
-        cropped_matrix = self.matrix_cut()
-        blocks = self.split_in_blocks(cropped_matrix)
-        processed_blocks = self.process_blocks(blocks)
-        H, W = cropped_matrix.shape
-        reconstructed_matrix = np.zeros((H, W), dtype=int)
+    def reconstruct_matrix(self, blocks, original_shape):
+        H, W = original_shape
+        res = np.zeros((H, W), dtype=int)
         i = 0
         for row in range(0, H, self.f):
             for col in range(0, W, self.f):
-                reconstructed_matrix[row:row+self.f, col:col+self.f] = processed_blocks[i]
+                res[row:row+self.f, col:col+self.f] = blocks[i]
                 i += 1
+        return res
+    
+    def compress_matrix(self, matrix):
+        cropped_matrix = self.matrix_cut(matrix)
+        blocks = self.split_in_blocks(cropped_matrix)     
+        processed_blocks = self.process_blocks(blocks)
+        reconstructed_matrix = self.reconstruct_matrix(processed_blocks, cropped_matrix.shape)
         return reconstructed_matrix
 
 

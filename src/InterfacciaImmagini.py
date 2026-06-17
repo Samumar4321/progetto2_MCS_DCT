@@ -117,6 +117,7 @@ class InterfacciaImmagini:
         )
         
         Thread(target=self.process_image, args=(percorso, f, d)).start()  
+        return
     
     def load_img(self, path):
         try:
@@ -147,7 +148,7 @@ class InterfacciaImmagini:
         img_original = self.load_img(percorso)
         if img_original is None:
             return
-        comprimitore = ComprimiImmagine(img_original, f, d)
-        img_reconstructed = comprimitore.compress_matrix()
+        comprimitore = ComprimiImmagine(f, d)
+        img_reconstructed = comprimitore.compress_matrix(img_original)
         # Esegui la visualizzazione nel thread principale di Tkinter
         self.root.after(0, lambda: self.show_image_comparison(img_original, img_reconstructed, f))
