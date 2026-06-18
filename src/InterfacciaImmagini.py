@@ -67,9 +67,11 @@ class InterfacciaImmagini:
         btn_elabora.pack(pady=30)
 
     def seleziona_file(self):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
         file_selezionato = filedialog.askopenfilename(
             title="Seleziona un file BMP",
             filetypes=[("Immagini BMP", "*.bmp"), ("Tutti i file", "*.*")],
+            initialdir=current_dir
         )
         if file_selezionato:
             self.image_path.set(file_selezionato)
