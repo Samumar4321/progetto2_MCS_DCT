@@ -10,7 +10,7 @@ import numpy as np
 \end{listing}
 
 \subsection{Codice DCT1}
-Per l'implementazione della Trasformata Discreta del Coseno (DCT) per matrici quadrate (in 2d) abbiamo deciso iniziare scrivendo l'algoritmo per calcolare la Trasformata per un singolo vettore monodimensionale (1d), successivamente applicheremo questa funzione alle righe e alle colonne della matrice, come mostrato a lezione.
+Per l'implementazione della Trasformata Discreta del Coseno (DCT) per matrici quadrate (in 2d) abbiamo deciso di iniziare scrivendo l'algoritmo per calcolare la Trasformata per un singolo vettore monodimensionale (1d), successivamente applicheremo questa funzione alle righe e alle colonne della matrice, come mostrato a lezione.
 Il codice per la DCT1 è il seguente:
 \begin{listing}[ht]
 \begin{minted}[linenos, frame=lines]{python}
@@ -36,7 +36,7 @@ def dct_1d(segnale):
 \end{listing}
 
 La funzione utilizza un doppio ciclo for, il primo serve per selezionare la singola frequenza k su cui operare in quella iterazione, il secondo ciclo for invece calcola il coefficiente della frequenza in analisi.
-Prima di calcolare il coefficiente si stabiolisce il fattore di normalizzazione da utilizzare per quella iterazione.
+Prima di calcolare il coefficiente si stabilisce il fattore di normalizzazione da utilizzare per quella iterazione.
 Una volta calcolati i coefficienti vengono ritornati sotto forma vettoriale.
 \subsection{Codice DCT2}
 Come anticipato, il calcolo della DCT2 homemade si basa sull'applicazione della DCT1 prima alle righe della matrice originale, e successivamente alle colonne della matrice risultante.
@@ -156,5 +156,5 @@ Per visualizzare meglio l'andamento asintotico abbiamo inserito i dati su un gra
 Come mostrato dall'andamento del grafico, i tempi riflettono la complessità teorica.
 La nostra implementazione della DCT2 possiede una crescita cubica, il tempo è quindi proporzionale a $N^3$;
 l'algoritmo di SciPy invece sfrutta l'ottimizzazione fft (Fast Fourier Transform) con tempi di esecuzione proporzionali a $N^2 \log(N)$, risultando quindi ordini di grandezza più efficiente al crescere di $N$.
-Una anomalia segnalata è la discrepanza con valori di $N$ molto piccoli, infatti quando le matrici (e quindi le operazioni) risultano di scarsa dimensione, l'implementazione di \textbf{SciPy} tende ad essere irregolare, atteggiamendo dovuto all'overhead aggiunto dalla chiamata alla libreria (trascurabile sulle grandi dimensioni).
+Una anomalia segnalata è la discrepanza con valori di $N$ molto piccoli, infatti quando le matrici (e quindi le operazioni) risultano di scarsa dimensione, l'implementazione di \textbf{SciPy} tende ad essere irregolare, atteggiamento dovuto all'overhead aggiunto dalla chiamata alla libreria (trascurabile sulle grandi dimensioni).
 

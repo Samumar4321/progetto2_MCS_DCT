@@ -1,7 +1,7 @@
 Il linguaggio scelto per il progetto risulta essere Python, famoso linguaggio open-source spesso utilizzato per applicazioni scientifiche.
 Python offre innumerevoli librerie tra cui scegliere per soddisfare il calcolo delle Trasformate di Fourier; abbiamo deciso di usufruire di diverse tra le più famose:
 \begin{itemize}
-	\item \textbf{NumPy} una delle librerie più utilizzate per la gestione di array e altricostrutti, utilizzata per gestire i segnali tradotti in array nel nostro caso.
+	\item \textbf{NumPy} una delle librerie più utilizzate per la gestione di array e altri costrutti, utilizzata per gestire i segnali tradotti in array nel nostro caso.
 	\item \textbf{SciPy}, in particolare il modulo \textbf{fft} che contiene funzioni per calcolare le Trasformate di Fourier, da questo modulo importiamo le funzioni \textit{Fast} per calcolare le trasformate ed eseguire la DCT a 1 e 2 dimensioni.
 	In particolare utilizziamo le funzioni \textbf{dct} e \textbf{dctn}, entrambe con parametro \texttt{norm $=$ 'ortho'} per rispettare i valori scalati forniti nel testo.  
 	\item \textbf{Pillow (PIL)} per caricare e convertire i file \texttt{.bmp} in matrici della libreria NumPy.

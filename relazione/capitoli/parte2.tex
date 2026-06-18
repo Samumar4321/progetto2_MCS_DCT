@@ -4,19 +4,19 @@ Per motivi di efficienza e velocità la compressione usando DCT2 non avviene con
 Il codice deve permettere un comportamente simile all'algoritmo di comopressione JPEG; il progetto è così strutturato:
 \begin{itemize}
 	\item \textbf{interfacciaImmagini.py}: si tratta della classe che gestisce l'interfaccia utente, ha il compito di interagire con quest'ultimo e mostrare i risultati dell'algoritmo applicato all'immagine scelta.
-	\item \textbf{compressioneImmagini.py}: è la classe che si occupa di eseguire l'effettiva compressione di una matrice (immagine in scala di grigi convertita); la classe accetta parametri quali ampiezza (\texttt(f)) e soglia di taglio (\texttt{d}). Permette anche di ottenere la matrice ricostruita ottenuta dalla divisione, compressione e filtraggio della matrice originale.
+	\item \textbf{compressioneImmagini.py}: è la classe che si occupa di eseguire l'effettiva compressione di una matrice (immagine in scala di grigi convertita); la classe accetta parametri quali ampiezza (\texttt{f}) e soglia di taglio (\texttt{d}). Permette anche di ottenere la matrice ricostruita ottenuta dalla divisione, compressione e filtraggio della matrice originale.
 	\item \textbf{main.py}: si tratta del file principale, da quì viene eseguito il codice per la comparazione tra \textit{DCT homemade} sviluppata da noi e \textit{DCT Fast} della libreria. Successivamente a questa comparazione viene inizializzata l'interfaccia che si occuperà di gestire la sezione di compressione immagini in stile jpeg.
 \end{itemize} 
 
 \subsection{Interfaccia grafica Tkinter}
 Per gestire l'interfaccia utente abbiamo usufruito di una famosa libreria standard di Python: \textbf{Tkinter}.
 Questa ci ha permesso di creare una semplice finestra che permettesse all'utente di inserire i valori di ampiezza e soglia di taglio e l'immagine da comprimere.
-Nell'interfaccia è presente un pulsante che avvia la verifica dei valori inseriti: se l'immagine risulta idonea e se ampiezza e taglio rispettano le regole imposte; se le variabili risultano corrette il programma procede alla compressione dell'immagine.
+Nell'interfaccia è presente un pulsante che avvia la verifica dei valori inseriti: se l'immagine risulta idonea e se ampiezza e taglio rispettano le regole imposte; le variabili risultano corrette ed il programma procede alla compressione dell'immagine.
 La compressione avviene asincronamente grazie alla creazione di un nuovo Thread che si occuperà di chiamare la classe \texttt{compressioneImmagini}.
 Abbiamo ritenuto utile impostare l'esecuzione in questa maniera per poter osservare il risultato finale su diversi esempi contemporaneamente, beneficio aggiunto deriva dal poter interagire con l'interfaccia una volta avviata la compressione.
 
 	\subsubsection{Caricamento immagine}
-	La funzione \texttt{load\_img} si occupa di caricare l'immagine fornita come percorso assoluto dalla GUI; analizzando il codice:
+	La funzione \texttt{load\_img} si occupa di caricare l'immagine fornita come percorso assoluto dalla GUI; analizzando il codice e
 	\begin{listing}[ht]
 		\begin{minted}[linenos, frame=lines]{python}
 def load_img(self, path):
@@ -28,7 +28,7 @@ def load_img(self, path):
 		return None
 		\end{minted}
 	\end{listing}
-	Notiamo che forziamo l'immagine ad assumere una scala di grigi con il comando \texttt{Image.open().convert('L')}, vitale siccome ci occupiamo unicamente di matrici a due dimensioni, dunque non colorate.
+	notiamo che forziamo l'immagine ad assumere una scala di grigi con il comando \texttt{Image.open().convert('L')}, vitale siccome ci occupiamo unicamente di matrici a due dimensioni, dunque non colorate.
 	Per convertire l'immagine in una matrice sfruttiamo un combinazione di \textbf{Pillow} per caricarla e forzarla in scala di grigi, e \textbf{NumPy} per creare un oggetto array facilmente accessibile.
 	
 \subsection{Compressione}
@@ -145,7 +145,7 @@ Si arriva quindi alla conclusione che maggiore è il numero di pixel presenti ne
 \clearpage
 Mostrando altri esempi per l'immagine del ponte notiamo che:
 \begin{itemize}
-	\item \textbf{figura 5} $d = 1$ e $f = 8$, nonostante si perdano tutte le informazioni del blocco tranne un singolo coefficienti, la compressione risulta sicuramente visibile ma meno marcata di quanto aspettato.
+	\item \textbf{figura 5} $d = 1$ e $f = 8$, nonostante si perdano tutte le informazioni del blocco tranne un singolo coefficiente, la compressione risulta sicuramente visibile ma meno marcata di quanto aspettato.
 	\item \textbf{figura 6} $d = 1$ e $f = 15$, aumentando la grandezza dei blocchi a $15\times15$ ma mantenendo la soglia di taglio a $1$, la perdita di informazioni comincia a diventare notevole, con dettagli dell'immagine originale difficilmente visibili e distinguibili.
 \end{itemize}
 \begin{figure}[h]
