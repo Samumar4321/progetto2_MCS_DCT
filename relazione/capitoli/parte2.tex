@@ -20,12 +20,12 @@ Abbiamo ritenuto utile impostare l'esecuzione in questa maniera per poter osserv
 	\begin{listing}[ht]
 		\begin{minted}[linenos, frame=lines]{python}
 def load_img(self, path):
-try:
-img = Image.open(path).convert('L')
-return np.array(img)
-except Exception as e:
-print(f"Errore nel caricamento dell'immagine: {e}")
-return None
+	try:
+		img = Image.open(path).convert('L')
+		return np.array(img)
+	except Exception as e:
+		print(f"Errore nel caricamento dell'immagine: {e}")
+		return None
 		\end{minted}
 	\end{listing}
 	Notiamo che forziamo l'immagine ad assumere una scala di grigi con il comando \texttt{Image.open().convert('L')}, vitale siccome ci occupiamo unicamente di matrici a due dimensioni, dunque non colorate.
@@ -107,6 +107,8 @@ def reconstruct_matrix(self, blocks, original_shape):
 	\end{listing}
 	
 	\subsubsection{Compressione}
+	La funzione principale non esegue operazioni essa stessa, ma si limita a chiamare le altre funzioni menzionate nel corretto ordine per ottenere il risultato corretto.
+	Ritorna la matrice bidimensionale che corrisponde all'immagine originale compressa, la GUI si occuperà successivamente di mostrarla.
 	\begin{listing}[ht]
 		\begin{minted}[linenos, frame=lines]{python}
 def compress_matrix(self, matrix): 
@@ -118,3 +120,40 @@ def compress_matrix(self, matrix):
 		\end{minted}
 	\end{listing}
 \subsection{Analisi risultati}
+Mostriamo alcuni esempi per diverse immagini, analizzando cosa succede sulle singole e nell'insieme.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{confronto_shoe.png}
+	\caption{Immagine $260\times260$ con $d = 5$ e $f = 8$}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{confronto_tony.png}
+	\caption{Immagine $450\times808$ con $d = 5$ e $f = 8$}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{immagini/confronto_ponte.png}
+	\caption{Immagine $4049\times2749$ con $d = 5$ e $f = 8$}
+\end{figure}
+
+Mantenendo costanti l'ampiezza del blocco $f$ e la soglia di taglio $d$ notiamo che più l'immagine si ingrandisce e meno la perdita di informazioni è impattante.
+Nell'immagine della scarpa la comperessione è notevole, la perdita di alcuni coefficienti impatta molto data la ristretta dimensione.
+Nella seconda invece, per quanto ancora visibile e percettibile, la perdita si riduce maggiormente, ricordando che l'immagine possiede circa 6 volte tanti pixel ($260\times260 = 67600$ vs $450\times800 = 360000$).
+Per il ponte (immagine 3) la stessa compressione risulta praticamente invisibile all'occhio nudo, data l'enorme quantità di informazioni che l'immagine possiede.
+Si arriva quindi alla conclusione che maggiore è il numero di pixel presenti nell'immagine, minore è la perdita di informazioni percepita.
+\clearpage
+Mostrando altri esempi per l'immagine del ponte notiamo che:
+\begin{itemize}
+	\item \textbf{figura 5} $d = 1$ e $f = 8$, nonostante si perdano tutte le informazioni del blocco tranne un singolo coefficienti, la compressione risulta sicuramente visibile ma meno marcata di quanto aspettato.
+	\item \textbf{figura 6} $d = 1$ e $f = 15$, aumentando la grandezza dei blocchi a $15\times15$ ma mantenendo la soglia di taglio a $1$, la perdita di informazioni comincia a diventare notevole, con dettagli dell'immagine originale difficilmente visibili e distinguibili.
+\end{itemize}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{immagini/confronto_ponte_1.png}
+	\caption{Immagine $4049\times2749$ con $d = 1$ e $f = 8$}
+\end{figure}\begin{figure}[h]
+\centering
+\includegraphics[width=1\textwidth]{immagini/confronto_ponte_15.png}
+\caption{Immagine $4049\times2749$ con $d = 1$ e $f = 15$}
+\end{figure}

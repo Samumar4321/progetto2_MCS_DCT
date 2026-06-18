@@ -43,7 +43,7 @@ Come anticipato, il calcolo della DCT2 homemade si basa sull'applicazione della 
 \begin{listing}[ht]
 \begin{minted}[linenos, frame=lines]{python}
 def dct_2d(matrice):
-    num_righe = np.shape(matrice)[0]
+	num_righe = np.shape(matrice)[0]
 	num_colonne = np.shape(matrice)[1]
 	matrix_temp = np.zeros((num_righe, num_colonne))
 	# Applica dct1 su ogni riga

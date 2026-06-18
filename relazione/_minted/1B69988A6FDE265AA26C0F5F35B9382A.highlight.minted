@@ -1,9 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{load\PYGZus{}img}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{path}\PYG{p}{):}
-\PYG{k}{try}\PYG{p}{:}
-\PYG{n}{img} \PYG{o}{=} \PYG{n}{Image}\PYG{o}{.}\PYG{n}{open}\PYG{p}{(}\PYG{n}{path}\PYG{p}{)}\PYG{o}{.}\PYG{n}{convert}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}L\PYGZsq{}}\PYG{p}{)}
-\PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{img}\PYG{p}{)}
-\PYG{k}{except} \PYG{n+ne}{Exception} \PYG{k}{as} \PYG{n}{e}\PYG{p}{:}
-\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Errore nel caricamento dell\PYGZsq{}immagine: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{e}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{k}{return} \PYG{k+kc}{None}
-\end{MintedVerbatim}
